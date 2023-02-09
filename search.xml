@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>建站备忘录</title>
+      <link href="/2023/02/09/%E5%BB%BA%E7%AB%99%E5%A4%87%E5%BF%98%E5%BD%95/"/>
+      <url>/2023/02/09/%E5%BB%BA%E7%AB%99%E5%A4%87%E5%BF%98%E5%BD%95/</url>
+      
+        <content type="html"><![CDATA[<p>图标库：<a href="https://fontawesome.com/icons">https://fontawesome.com/icons</a></p><p>新建一篇文章：<code>hexo new post &quot;article title&quot;</code> </p><p>新建页面：<code>hexo new page &quot;page name&quot;</code></p><p>Hexo 默认的静态 <code>url</code> 格式是：<code>:year/:month/:day/:title</code>，是按照年、月、日、文章标题来生成固定链接的。如：<code>http://id.github.io/2022/11/23/hello-world</code>。</p><p>使用 Abbrlink 插件可以使每篇文章都有一个唯一的编号，并将文章的链接用这个编号唯一区别，这样链接中不会出现中文，也不会因为修改文章的日期而导致链接的改变。</p><p>使用gulp压缩静态资源</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><p>&#x3D;&#x3D;1&#x3D;&#x3D;<br>‘1’</p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 建站 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> GAD </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>CARE-GNN</title>
       <link href="/2022/11/09/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0%20d4f08d3bf0fa4dbf9a276e507d495337/"/>
       <url>/2022/11/09/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0%20d4f08d3bf0fa4dbf9a276e507d495337/</url>
