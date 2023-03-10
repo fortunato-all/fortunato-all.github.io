@@ -1,0 +1,295 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Powerful Graph Convolutional Networks with Adaptive Propagation Mechanism for Homophily and Heterophily | 吃萝卜不吐萝卜皮~</title><meta name="author" content="fortunato"><meta name="copyright" content="fortunato"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="这篇文章是2022一篇综述里的，看之前没有意识到是前几年在spatial domain的研究，但是看了还是写下来了。 Powerful Graph Convolutional Networks with Adaptive Propagation Mechanism for Homophily and Heterophily(HOG-GCN) Motivation：let the prop">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Powerful Graph Convolutional Networks with Adaptive Propagation Mechanism for Homophily and Heterophily">
+<meta property="og:url" content="https://fortunato-all.github.io/posts/52924/index.html">
+<meta property="og:site_name" content="吃萝卜不吐萝卜皮~">
+<meta property="og:description" content="这篇文章是2022一篇综述里的，看之前没有意识到是前几年在spatial domain的研究，但是看了还是写下来了。 Powerful Graph Convolutional Networks with Adaptive Propagation Mechanism for Homophily and Heterophily(HOG-GCN) Motivation：let the prop">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/hetero/taxonomy.png">
+<meta property="article:published_time" content="2023-03-05T02:08:22.000Z">
+<meta property="article:modified_time" content="2023-03-10T10:42:42.625Z">
+<meta property="article:author" content="fortunato">
+<meta property="article:tag" content="heterophily">
+<meta property="article:tag" content="spatial domain">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/hetero/taxonomy.png"><link rel="shortcut icon" href="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/论文阅读笔记/头像.jpg"><link rel="canonical" href="https://fortunato-all.github.io/posts/52924/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":1,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":100,"languages":{"author":"作者: fortunato","link":"链接: ","source":"来源: 吃萝卜不吐萝卜皮~","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#d7d1dd","bgDark":"#1f1f1f","position":"bottom-right"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Powerful Graph Convolutional Networks with Adaptive Propagation Mechanism for Homophily and Heterophily',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-03-10 18:42:42'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/footer.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/论文阅读笔记/头像.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">7</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/books/"><i class="fa-fw fas fa-solid fa-book"></i><span> 书</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" href="/lives/"><i class="fa-fw fa-solid fa-file-pen"></i><span> 随笔</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/hetero/taxonomy.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">吃萝卜不吐萝卜皮~</a></span><div id="he-plugin-simple"></div><div id="none_space"></div><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/books/"><i class="fa-fw fas fa-solid fa-book"></i><span> 书</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" href="/lives/"><i class="fa-fw fa-solid fa-file-pen"></i><span> 随笔</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Powerful Graph Convolutional Networks with Adaptive Propagation Mechanism for Homophily and Heterophily</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-03-05T02:08:22.000Z" title="发表于 2023-03-05 10:08:22">2023-03-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-03-10T10:42:42.625Z" title="更新于 2023-03-10 18:42:42">2023-03-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB/">文献阅读</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">577</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>1分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Powerful Graph Convolutional Networks with Adaptive Propagation Mechanism for Homophily and Heterophily"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>这篇文章是2022一篇综述里的，看之前没有意识到是前几年在spatial
+domain的研究，但是看了还是写下来了。</p>
+<h2
+id="powerful-graph-convolutional-networks-with-adaptive-propagation-mechanism-for-homophily-and-heterophilyhog-gcn">Powerful
+Graph Convolutional Networks with Adaptive Propagation Mechanism for
+Homophily and Heterophily(HOG-GCN)</h2>
+<p>Motivation：let the propagation mechanism of GCN essentially suitable
+for both homophily and
+heterophily，根据节点对之间的同质性进行聚合。首先从attribute和topology
+space中学习homophily degree
+matrix，并进一步用它在邻域之间进行特征传播；在传播过程可以通过下游半监督任务帮助学习更好的homophily
+degree matrix</p>
+<p><img src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/hetero/20230306105851.png" style="zoom: 50%;" /></p>
+<h4 id="homophily-degree-matrix-estimation">Homophily Degree Matrix
+Estimation</h4>
+<p><strong>attribute space</strong>：graph-agnostic MLP</p>
+<p><img src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/hetero/20230310182653.png" style="zoom: 50%;" /></p>
+<p>其中，<span class="math inline">\(B_{ic}\)</span>表示表示节点<span
+class="math inline">\(v_i\)</span>属于<em>class c</em>的概率，<span
+class="math inline">\(S_{ij}=b_i b_j^T\)</span>表示节点<span
+class="math inline">\(v_i\)</span>和节点<span
+class="math inline">\(v_j\)</span>属于同一类的程度。</p>
+<p><strong>topology space：</strong>label propagation</p>
+<p><img src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/hetero/20230310183426.png" style="zoom: 33%;" /></p>
+<p>标签传播算法：每一次迭代都会根据与自己相连的节点所属的标签改变自己的标签，更改的原则是选择与其相连的节点中所属标签最多的社区标签为自己的社区标签。随着社区标签不断传播。最终，连接紧密的节点将有共同的标签。经典的标签传播通常假设两个连接的节点更有可能具有相同的类，从而在邻域之间迭代地传播标签。然而，经典的标签传播技术旨在捕捉同质性的假设，这不能直接适应具有同质性的网络。</p>
+<p>关键的直觉是，类内标签之间的影响大于类间标签之间的影响。因此，学习到的权重矩阵可以用来表示两个节点所达到的程度属于同一个类。由于网络表现出不同程度的异质性，我们在网络的k阶结构上进行标签传播，以捕获更多的亲同性节点（例如，k
+= 2）。</p>
+<p>值得注意的是，同质度矩阵S是基于原始节点属性估计的，这些属性不受网络异质性的约束。因此，它也适用于具有异质性或低同质性的网络。</p>
+<p>根据得到的S和T，我们可以得到homophily matrix：<span
+class="math inline">\(h=\alpha S+\beta T\)</span></p>
+<h4 id="homophily-guided-propagation">Homophily-guided Propagation</h4>
+<p>在spatial domain为不同的邻居分配不同的权重。</p>
+<p><img
+src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/hetero/20230310184157.png" /></p>
+<p>实验验证，k=2时，效果最好。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://fortunato-all.github.io">fortunato</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://fortunato-all.github.io/posts/52924/">https://fortunato-all.github.io/posts/52924/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://fortunato-all.github.io" target="_blank">吃萝卜不吐萝卜皮~</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/heterophily/">heterophily</a><a class="post-meta__tags" href="/tags/spatial-domain/">spatial domain</a></div><div class="post_share"><div class="social-share" data-image="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/hetero/taxonomy.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="/posts/62968/"><img class="prev-cover" src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/论文阅读笔记/2.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">动态图异常检测</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/posts/10605/" title="general heterophily"><img class="cover" src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/hetero/taxonomy.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-02-13</div><div class="title">general heterophily</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="waline-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/论文阅读笔记/头像.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">fortunato</div><div class="author-info__description">记一忘三二</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">7</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/fortunato-all"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/fortunato-all" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#powerful-graph-convolutional-networks-with-adaptive-propagation-mechanism-for-homophily-and-heterophilyhog-gcn"><span class="toc-text">Powerful
+Graph Convolutional Networks with Adaptive Propagation Mechanism for
+Homophily and Heterophily(HOG-GCN)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#homophily-degree-matrix-estimation"><span class="toc-text">Homophily Degree Matrix
+Estimation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#homophily-guided-propagation"><span class="toc-text">Homophily-guided Propagation</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/52924/" title="Powerful Graph Convolutional Networks with Adaptive Propagation Mechanism for Homophily and Heterophily"><img src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/hetero/taxonomy.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Powerful Graph Convolutional Networks with Adaptive Propagation Mechanism for Homophily and Heterophily"/></a><div class="content"><a class="title" href="/posts/52924/" title="Powerful Graph Convolutional Networks with Adaptive Propagation Mechanism for Homophily and Heterophily">Powerful Graph Convolutional Networks with Adaptive Propagation Mechanism for Homophily and Heterophily</a><time datetime="2023-03-05T02:08:22.000Z" title="发表于 2023-03-05 10:08:22">2023-03-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/62968/" title="动态图异常检测"><img src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/论文阅读笔记/2.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="动态图异常检测"/></a><div class="content"><a class="title" href="/posts/62968/" title="动态图异常检测">动态图异常检测</a><time datetime="2023-02-21T01:56:25.000Z" title="发表于 2023-02-21 09:56:25">2023-02-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/59918/" title="扩散模型"><img src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/大图.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="扩散模型"/></a><div class="content"><a class="title" href="/posts/59918/" title="扩散模型">扩散模型</a><time datetime="2023-02-19T09:34:14.000Z" title="发表于 2023-02-19 17:34:14">2023-02-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/11901/" title="无监督异常检测"><img src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/论文阅读笔记/2.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无监督异常检测"/></a><div class="content"><a class="title" href="/posts/11901/" title="无监督异常检测">无监督异常检测</a><time datetime="2023-02-19T09:33:38.000Z" title="发表于 2023-02-19 17:33:38">2023-02-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/10605/" title="general heterophily"><img src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/hetero/taxonomy.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="general heterophily"/></a><div class="content"><a class="title" href="/posts/10605/" title="general heterophily">general heterophily</a><time datetime="2023-02-13T11:27:14.000Z" title="发表于 2023-02-13 19:27:14">2023-02-13</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/主页背景.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2023 By fortunato</div><div class="footer_custom_text">相逢的人会再相逢</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">简</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container').forEach(node => {
+            if (node.hasAttribute('display')) {
+              btf.wrap(node, 'div', { class: 'mathjax-overflow' })
+            } else {
+              btf.wrap(node, 'span', { class: 'mathjax-overflow' })
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><script>function loadWaline () {
+  function insertCSS () {
+    const link = document.createElement("link")
+    link.rel = "stylesheet"
+    link.href = "https://cdn.jsdelivr.net/npm/@waline/client/dist/waline.min.css"
+    document.head.appendChild(link)
+  }
+
+  function initWaline () {
+    const waline = Waline.init(Object.assign({
+      el: '#waline-wrap',
+      serverURL: 'https://waline-20enl8ipe-fortunato-all.vercel.app/',
+      pageview: false,
+      dark: 'html[data-theme="dark"]',
+      path: window.location.pathname,
+      comment: false,
+    }, null))
+  }
+
+  if (typeof Waline === 'function') initWaline()
+  else {
+    insertCSS()
+    getScript('https://cdn.jsdelivr.net/npm/@waline/client/dist/waline.min.js').then(initWaline)
+  }
+}
+
+if ('Waline' === 'Waline' || !true) {
+  if (true) btf.loadComment(document.getElementById('waline-wrap'),loadWaline)
+  else setTimeout(loadWaline, 0)
+} else {
+  function loadOtherComment () {
+    loadWaline()
+  }
+}</script></div><script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script><script src="https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0"></script><script src="/js/weather.js"></script><script src="https://cdn.jsdelivr.net/gh/xiabo2/CDN@latest/fishes.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
