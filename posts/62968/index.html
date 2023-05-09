@@ -1,19 +1,18 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>动态图异常检测 | 吃萝卜不吐萝卜皮~</title><meta name="author" content="fortunato"><meta name="copyright" content="fortunato"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="传统意义的时序异常检测 随着车辆、工业系统和数据中心等网络物理系统（CPS）中的互联设备和传感器的快速增长，监测这些设备的需求越来越大以保护他们免受攻击。对于电网、水处理厂、交通和通信网络等关键基础设施尤其如此。 许多这样的现实世界系统涉及到大量的相互连接的传感器，这些传感器可以产生大量的时间序列数据。例如，在一个水处理厂中，可以有许多传感器测量其各部件中的水位、流量、水质、阀门状态等。来自这">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>动态图异常检测数据集，及GearSage代码详解 | 吃萝卜不吐萝卜皮~</title><meta name="author" content="fortunato"><meta name="copyright" content="fortunato"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="传统意义的时序异常检测 随着车辆、工业系统和数据中心等网络物理系统（CPS）中的互联设备和传感器的快速增长，监测这些设备的需求越来越大以保护他们免受攻击。对于电网、水处理厂、交通和通信网络等关键基础设施尤其如此。 许多这样的现实世界系统涉及到大量的相互连接的传感器，这些传感器可以产生大量的时间序列数据。例如，在一个水处理厂中，可以有许多传感器测量其各部件中的水位、流量、水质、阀门状态等。来自这">
 <meta property="og:type" content="article">
-<meta property="og:title" content="动态图异常检测">
+<meta property="og:title" content="动态图异常检测数据集，及GearSage代码详解">
 <meta property="og:url" content="https://fortunato-all.github.io/posts/62968/index.html">
 <meta property="og:site_name" content="吃萝卜不吐萝卜皮~">
 <meta property="og:description" content="传统意义的时序异常检测 随着车辆、工业系统和数据中心等网络物理系统（CPS）中的互联设备和传感器的快速增长，监测这些设备的需求越来越大以保护他们免受攻击。对于电网、水处理厂、交通和通信网络等关键基础设施尤其如此。 许多这样的现实世界系统涉及到大量的相互连接的传感器，这些传感器可以产生大量的时间序列数据。例如，在一个水处理厂中，可以有许多传感器测量其各部件中的水位、流量、水质、阀门状态等。来自这">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/2.png">
+<meta property="og:image" content="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/%E5%A4%A7%E5%9B%BE.jpg">
 <meta property="article:published_time" content="2023-02-21T01:56:25.000Z">
-<meta property="article:modified_time" content="2023-03-10T10:13:26.308Z">
+<meta property="article:modified_time" content="2023-05-09T02:18:57.104Z">
 <meta property="article:author" content="fortunato">
-<meta property="article:tag" content="GAD">
-<meta property="article:tag" content="time series">
+<meta property="article:tag" content="AED">
 <meta property="article:tag" content="dynamic graph">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/2.png"><link rel="shortcut icon" href="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/论文阅读笔记/头像.jpg"><link rel="canonical" href="https://fortunato-all.github.io/posts/62968/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+<meta name="twitter:image" content="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/%E5%A4%A7%E5%9B%BE.jpg"><link rel="shortcut icon" href="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/论文阅读笔记/头像.jpg"><link rel="canonical" href="https://fortunato-all.github.io/posts/62968/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
   root: '/',
   algolia: undefined,
   localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
@@ -50,12 +49,12 @@
   islazyload: false,
   isAnchor: false
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
-  title: '动态图异常检测',
+  title: '动态图异常检测数据集，及GearSage代码详解',
   isPost: true,
   isHome: false,
   isHighlightShrink: false,
   isToc: true,
-  postUpdate: '2023-03-10 18:13:26'
+  postUpdate: '2023-05-09 10:18:57'
 }</script><noscript><style type="text/css">
   #nav {
     opacity: 1
@@ -160,13 +159,253 @@ window.addEventListener('load',()=> { preloader.endLoading() })
 if (false) {
   document.addEventListener('pjax:send', () => { preloader.initLoading() })
   document.addEventListener('pjax:complete', () => { preloader.endLoading() })
-}</script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/论文阅读笔记/头像.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">7</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/books/"><i class="fa-fw fas fa-solid fa-book"></i><span> 书</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" href="/lives/"><i class="fa-fw fa-solid fa-file-pen"></i><span> 随笔</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/论文阅读笔记/2.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">吃萝卜不吐萝卜皮~</a></span><div id="he-plugin-simple"></div><div id="none_space"></div><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/books/"><i class="fa-fw fas fa-solid fa-book"></i><span> 书</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" href="/lives/"><i class="fa-fw fa-solid fa-file-pen"></i><span> 随笔</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">动态图异常检测</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-02-21T01:56:25.000Z" title="发表于 2023-02-21 09:56:25">2023-02-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-03-10T10:13:26.308Z" title="更新于 2023-03-10 18:13:26">2023-03-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB/">文献阅读</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">303</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>1分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="动态图异常检测"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h4 id="传统意义的时序异常检测">传统意义的时序异常检测</h4>
+}</script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/论文阅读笔记/头像.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">9</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/books/"><i class="fa-fw fas fa-solid fa-book"></i><span> 书</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" href="/lives/"><i class="fa-fw fa-solid fa-file-pen"></i><span> 随笔</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/大图.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">吃萝卜不吐萝卜皮~</a></span><div id="he-plugin-simple"></div><div id="none_space"></div><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/books/"><i class="fa-fw fas fa-solid fa-book"></i><span> 书</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" href="/lives/"><i class="fa-fw fa-solid fa-file-pen"></i><span> 随笔</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">动态图异常检测数据集，及GearSage代码详解</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-02-21T01:56:25.000Z" title="发表于 2023-02-21 09:56:25">2023-02-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-09T02:18:57.104Z" title="更新于 2023-05-09 10:18:57">2023-05-09</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB/">文献阅读</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="动态图异常检测数据集，及GearSage代码详解"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="传统意义的时序异常检测"><a
+target="_blank" rel="noopener" href="https://www.zhihu.com/people/muzhen-14/posts?page=1">传统意义的时序异常检测</a></h2>
 <p>随着车辆、工业系统和数据中心等网络物理系统（CPS）中的互联设备和传感器的快速增长，监测这些设备的需求越来越大以保护他们免受攻击。对于电网、水处理厂、交通和通信网络等关键基础设施尤其如此。</p>
 <p>许多这样的现实世界系统涉及到大量的相互连接的传感器，这些传感器可以产生大量的时间序列数据。例如，在一个水处理厂中，可以有许多传感器测量其各部件中的水位、流量、水质、阀门状态等。<strong>来自这些传感器的数据可以以复杂的、非线性的方式联系起来</strong>：例如，一个阀门导致压力和流量的变化，导致进一步的变化，因为自动机制响应变化的变化。随着这种传感器数据的复杂性和维度的增长，人类手动监控这些数据的能力越来越低。</p>
-<p>https://www.zhihu.com/people/muzhen-14/posts?page=1</p>
+<h2
+id="研究时序变化的图结构的异常检测">研究时序变化的图结构的异常检测</h2>
+<table>
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 3%" />
+<col style="width: 4%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 7%" />
+<col style="width: 28%" />
+<col style="width: 28%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Dataset</th>
+<th style="text-align: center;">#Node</th>
+<th style="text-align: center;">#Edge</th>
+<th style="text-align: center;">Edge Type</th>
+<th style="text-align: center;">Max. Degree</th>
+<th style="text-align: center;">Avg. Degree</th>
+<th>#Timestamp</th>
+<th style="text-align: center;">Paper</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">UCI Message<a href="#fn1"
+class="footnote-ref" id="fnref1"
+role="doc-noteref"><sup>1</sup></a></td>
+<td style="text-align: center;">1899</td>
+<td style="text-align: center;">13838</td>
+<td style="text-align: center;">directed、unweighted、inject
+anomalies</td>
+<td style="text-align: center;">255</td>
+<td style="text-align: center;">14.57</td>
+<td>190</td>
+<td style="text-align: center;"><a
+target="_blank" rel="noopener" href="https://github.com/Ljiajie/Addgraph">AddGraph</a>、DynAD、Hierarchical、<a
+target="_blank" rel="noopener" href="https://github.com/LeiCaiwsu/StrGNN">StrGNN</a></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Digg</td>
+<td style="text-align: center;">30360</td>
+<td style="text-align: center;">85155</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">283</td>
+<td style="text-align: center;">5.61</td>
+<td>16</td>
+<td style="text-align: center;">AddGraph、DynAD、StrGNN</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">arXiv hep-th</td>
+<td style="text-align: center;">6798</td>
+<td style="text-align: center;">214693</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">1590</td>
+<td style="text-align: center;">63.16</td>
+<td></td>
+<td style="text-align: center;">DynAD</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Enron<a href="#fn2" class="footnote-ref"
+id="fnref2" role="doc-noteref"><sup>2</sup></a></td>
+<td style="text-align: center;">87036</td>
+<td style="text-align: center;">530284</td>
+<td style="text-align: center;">direcetd、unweighted、inject
+anomalies</td>
+<td style="text-align: center;">1150</td>
+<td style="text-align: center;">22</td>
+<td></td>
+<td style="text-align: center;">Hierarchical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Facebook<a href="#fn3"
+class="footnote-ref" id="fnref3"
+role="doc-noteref"><sup>3</sup></a></td>
+<td style="text-align: center;">60730</td>
+<td style="text-align: center;">607487</td>
+<td style="text-align: center;">undirected、unweighted、inject
+anomalies</td>
+<td style="text-align: center;">203</td>
+<td style="text-align: center;">9</td>
+<td></td>
+<td style="text-align: center;">Hierarchical</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Math<a href="#fn4" class="footnote-ref"
+id="fnref4" role="doc-noteref"><sup>4</sup></a></td>
+<td style="text-align: center;">24740</td>
+<td style="text-align: center;">323357</td>
+<td style="text-align: center;">directed、unweighted、inject
+anomalies</td>
+<td style="text-align: center;">231</td>
+<td style="text-align: center;">15</td>
+<td></td>
+<td style="text-align: center;">Hierarchical</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Email</td>
+<td style="text-align: center;">2029</td>
+<td style="text-align: center;">3724</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td>20</td>
+<td style="text-align: center;">StrGNN</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Topology</td>
+<td style="text-align: center;">34761</td>
+<td style="text-align: center;">107661</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td>21</td>
+<td style="text-align: center;">StrGNN</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Bitcoin-alpha</td>
+<td style="text-align: center;">3783</td>
+<td style="text-align: center;">14124</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td>63</td>
+<td style="text-align: center;">StrGNN</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Bitcoin-otc</td>
+<td style="text-align: center;">5881</td>
+<td style="text-align: center;">21492</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td>63</td>
+<td style="text-align: center;">StrGNN</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>UCI Message</strong>：a directed
+network，其中包含了在加州大学欧文分校的一个在线社区中发布的信息，每个节点代表一个用户，每个有向边代表两个用户之间的一条消息</li>
+<li><strong>Digg</strong>：社交新闻网站Digg旗下的一个响应网络。网络中的每个节点都是站点的用户，每条边都表示一个用户回复另一个用户。</li>
+</ul>
+<p><em>这两个数据集中的边都用时间戳进行了注释，在AddGraph<a href="#fn5"
+class="footnote-ref" id="fnref5"
+role="doc-noteref"><sup>5</sup></a>（使用）中，作者为每个节点随机生成一个初始向量作为其内容特征。</em></p>
+<ul>
+<li><strong>arXiv</strong>：来自e-print arXiv的collaboration
+network，节点和边分别表示作者和协作链接。</li>
+<li><strong>Enron</strong>：Enron公司的电子邮件数据集包含了大约50万封由安然公司的员工生成的电子邮件。美国联邦能源管理委员会在调查安然公司倒闭期间获得了这些电子邮件。</li>
+<li><strong>Facebook</strong>：无向网络包含了Facebook用户的友谊数据。一个节点表示一个用户，一条边表示两个用户之间的友谊数据。该数据集并不完整，它包含了整个脸书友谊图中的一小部分子集。</li>
+<li><strong>Math</strong>：这是一个在stack exchange网站Math
+Overflow上的时间交互网络，不同类型的边表示不同的交互关系。</li>
+</ul>
+<p><em>hierarchical GNN<a href="#fn6" class="footnote-ref" id="fnref6"
+role="doc-noteref"><sup>6</sup></a>使用伯努利分布注入不同比例的异常，然后将数据集分成两半分别作为训练集和测试集</em></p>
+<ul>
+<li><strong>Email</strong>：是民主党全国委员会的电子邮件。每个节点对应于一个人，边表示两个人之间的电子邮件交流。</li>
+<li><strong>Topology</strong>：互联网自治系统之间的网络连接。节点是自治系统，边是自治系统之间的连接。</li>
+<li><strong>Bitcoin-alpha和Bitcoin-otc</strong>：分别来自两个比特币平台Alpha和OTC，节点表示来自该平台的用户，如果一个用户对平台上的另一个用户进行评级，则在他们之间存在一条边。</li>
+</ul>
+<h2 id="dgraph数据集"><a
+target="_blank" rel="noopener" href="https://dgraph.xinye.com/introduction">DGraph数据集</a></h2>
+<p><a
+target="_blank" rel="noopener" href="https://ai.ppdai.com/mirror/goToMirrorDetailSix?mirrorId=28&amp;tabindex=1">信也科技杯图算法大赛</a>、<a
+target="_blank" rel="noopener" href="https://github.com/DGraphXinye/DGraphFin_baseline">Github地址</a>、<a
+target="_blank" rel="noopener" href="https://openreview.net/forum?id=2rQPxsmjKF">DGraph论文openreview（含appendix）</a></p>
+<p>大小是Elliptic的17倍，动态图上的节点异常检测，贴近工业背景</p>
+<p>node attribute、node feature、edge weight、timestamp of the edge</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">File dgraphfin.npz including below keys:  </span><br><span class="line"></span><br><span class="line">x: 17-dimensional node features.</span><br><span class="line"></span><br><span class="line">y: node label. There four classes. Below are the nodes counts of each class.     </span><br><span class="line">  0: 1210092    </span><br><span class="line">  1: 15509    </span><br><span class="line">  2: 1620851    </span><br><span class="line">  3: 854098    </span><br><span class="line">  Nodes of Class 1 are fraud users and nodes of 0 are normal users, and they the two classes to be predicted.    </span><br><span class="line">  Nodes of Class 2 and Class 3 are background users.    </span><br><span class="line"></span><br><span class="line">edge<span class="emphasis">_index: shape (4300999, 2). (directed)   </span></span><br><span class="line"><span class="emphasis">  Each edge is in the form (id_</span>a, id<span class="emphasis">_b), where ids are the indices in x.        </span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">edge_</span>type: 11 types of edges. </span><br><span class="line"></span><br><span class="line">edge<span class="emphasis">_timestamp: the desensitized timestamp of each edge.</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis">train_</span>mask, valid<span class="emphasis">_mask, test_</span>mask:  </span><br><span class="line">  Nodes of Class 0 and Class 1 are randomly splitted by 70/15/15.    </span><br></pre></td></tr></table></figure>
+<p>节点的出度表示信息完整度（可自控），入度表示被信任关系（不可自控）</p>
+<p>统计：一个有label的节点他周围的节点是有label多的还是没有label的多</p>
+<p>有向图-&gt;邻接矩阵，邻接链表-&gt;筛选出label=0，1的节点-&gt;</p>
+<p>首先用dict得到每个节点的入度和出度个数</p>
+<ol type="1">
+<li>有向图的节点出度数和入度数相等，先得到图中所有定点的平均度数：1.1622593938738837</li>
+<li>正常节点有1210092个，其邻居中正常的有1277944个，欺诈的有9370个，bg2有1176560个，bg3有701840个。</li>
+<li>异常节点有15509个，其邻居中正常的有9370个，欺诈的有424个，bg2有12657个，bg3有6527个。</li>
+</ol>
+<h3
+id="在gearsage的处理方法中与pyg的方法不同">在GearSage的处理方法中（与PyG的方法不同）：</h3>
+<p>原来的npz文件：['x', 'y', 'edge_index', 'edge_type',
+'edge_timestamp', 'train_mask', 'valid_mask', 'test_mask’]</p>
+<p>处理后的data.pt：Data(x=[3700550, 31], edge_index=[2, 4300999],
+edge_attr=[4300999], y=[3700550, 1], train_mask=[857899],
+test_mask=[183840], valid_mask=[183862], edge_timestamp=[4300999])</p>
 <h4
-id="这里研究是是时序变化的图结构的异常检测">这里研究是是时序变化的图结构的异常检测</h4>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://fortunato-all.github.io">fortunato</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://fortunato-all.github.io/posts/62968/">https://fortunato-all.github.io/posts/62968/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://fortunato-all.github.io" target="_blank">吃萝卜不吐萝卜皮~</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/GAD/">GAD</a><a class="post-meta__tags" href="/tags/time-series/">time series</a><a class="post-meta__tags" href="/tags/dynamic-graph/">dynamic graph</a></div><div class="post_share"><div class="social-share" data-image="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/论文阅读笔记/2.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/59918/"><img class="prev-cover" src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/大图.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">扩散模型</div></div></a></div><div class="next-post pull-right"><a href="/posts/52924/"><img class="next-cover" src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/hetero/taxonomy.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Powerful Graph Convolutional Networks with Adaptive Propagation Mechanism for Homophily and Heterophily</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/posts/45529/" title="CARE-GNN"><img class="cover" src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/论文阅读笔记/2.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-11-09</div><div class="title">CARE-GNN</div></div></a></div><div><a href="/posts/11901/" title="无监督异常检测"><img class="cover" src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/论文阅读笔记/2.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-02-19</div><div class="title">无监督异常检测</div></div></a></div><div><a href="/posts/10605/" title="general heterophily"><img class="cover" src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/hetero/taxonomy.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-02-13</div><div class="title">general heterophily</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="waline-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/论文阅读笔记/头像.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">fortunato</div><div class="author-info__description">记一忘三二</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">7</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/fortunato-all"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/fortunato-all" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%A0%E7%BB%9F%E6%84%8F%E4%B9%89%E7%9A%84%E6%97%B6%E5%BA%8F%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B"><span class="toc-text">传统意义的时序异常检测</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%99%E9%87%8C%E7%A0%94%E7%A9%B6%E6%98%AF%E6%98%AF%E6%97%B6%E5%BA%8F%E5%8F%98%E5%8C%96%E7%9A%84%E5%9B%BE%E7%BB%93%E6%9E%84%E7%9A%84%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B"><span class="toc-text">这里研究是是时序变化的图结构的异常检测</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/52924/" title="Powerful Graph Convolutional Networks with Adaptive Propagation Mechanism for Homophily and Heterophily"><img src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/hetero/taxonomy.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Powerful Graph Convolutional Networks with Adaptive Propagation Mechanism for Homophily and Heterophily"/></a><div class="content"><a class="title" href="/posts/52924/" title="Powerful Graph Convolutional Networks with Adaptive Propagation Mechanism for Homophily and Heterophily">Powerful Graph Convolutional Networks with Adaptive Propagation Mechanism for Homophily and Heterophily</a><time datetime="2023-03-05T02:08:22.000Z" title="发表于 2023-03-05 10:08:22">2023-03-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/62968/" title="动态图异常检测"><img src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/论文阅读笔记/2.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="动态图异常检测"/></a><div class="content"><a class="title" href="/posts/62968/" title="动态图异常检测">动态图异常检测</a><time datetime="2023-02-21T01:56:25.000Z" title="发表于 2023-02-21 09:56:25">2023-02-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/59918/" title="扩散模型"><img src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/大图.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="扩散模型"/></a><div class="content"><a class="title" href="/posts/59918/" title="扩散模型">扩散模型</a><time datetime="2023-02-19T09:34:14.000Z" title="发表于 2023-02-19 17:34:14">2023-02-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/11901/" title="无监督异常检测"><img src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/论文阅读笔记/2.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无监督异常检测"/></a><div class="content"><a class="title" href="/posts/11901/" title="无监督异常检测">无监督异常检测</a><time datetime="2023-02-19T09:33:38.000Z" title="发表于 2023-02-19 17:33:38">2023-02-19</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/10605/" title="general heterophily"><img src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/hetero/taxonomy.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="general heterophily"/></a><div class="content"><a class="title" href="/posts/10605/" title="general heterophily">general heterophily</a><time datetime="2023-02-13T11:27:14.000Z" title="发表于 2023-02-13 19:27:14">2023-02-13</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/主页背景.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2023 By fortunato</div><div class="footer_custom_text">相逢的人会再相逢</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">简</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+id="对数据集的处理read_dgraphfinfolder">对数据集的处理：read_dgraphfin(folder)</h4>
+<ol type="1">
+<li>增加节点入度——dim=1。将节点入度作为新加入的一列<img
+src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/hetero/20230404093004.png" /></li>
+<li>邻域时间戳信息——dim=2。构建edge_timestamp的邻接矩阵，增加edge_timestamp_sum（每个节点连边的时间戳的总和，然后normalize）和edge_timestamp_max（先增加反向边，然后求该节点相邻边的最大时间戳，并log）</li>
+<li>边属性信息——dim=11。构建edge_attr的邻接矩阵，获取与当前节点相连的边中，不同类型的边的数量。</li>
+</ol>
+<h4 id="节点特征工程">节点特征工程</h4>
+<ol type="1">
+<li>增加节点度数——dim=2。将节点的入度和出度作为新的特征</li>
+<li>与邻域的相似度信息——dim=1。（将相邻节点的cosine
+similarity作为新的特征）</li>
+<li>处理缺失值。将初始的17维节点特征中的缺失值-1替换为1</li>
+<li>前景、背景节点信息——dim=2</li>
+</ol>
+<h4 id="边特征工程">边特征工程</h4>
+<ol type="1">
+<li>加入反向边增加图稠密度——此时的图不一定是对称的，因为正向和反向边的时间戳不一定一样，但是type是一样的</li>
+<li>构建边的方向性信息：</li>
+<li>先把原来的edge_index的row和col各自concat，然后选择里面row小于col的边保留，</li>
+</ol>
+<p>tips：</p>
+<p>1、<code>temp = scatter.scatter(a, row, dim=0, dim_size=y.size(0), reduce="sum")</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">torch_scatter.scatter(src: torch.Tensor, index: torch.Tensor, dim: <span class="built_in">int</span> = - <span class="number">1</span>, out: <span class="type">Optional</span>[torch.Tensor] = <span class="literal">None</span>, dim_size: <span class="type">Optional</span>[<span class="built_in">int</span>] = <span class="literal">None</span>, reduce: <span class="built_in">str</span> = <span class="string">&#x27;sum&#x27;</span>) → torch.Tensor</span><br></pre></td></tr></table></figure>
+<p>根据index，将index相同值对应的src元素进行对应定义的计算，dim为在第几维进行相应的运算。e.g.scatter_sum即进行sum运算，scatter_mean即进行mean运算。</p>
+<p><img
+src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/hetero/20230404111601.png" /></p>
+<p>在gear的处理过程中，对于<code>a = F.one_hot(y[col])</code>，按照row，也就是边的src节点，把src节点相同的边的dst节点的one
+hot相加，输出的尺寸是[节点个数,2]，表示src所连dst节点的背景和前景节点情况。</p>
+<p>接着，<code>temp += scatter.scatter(b, col, dim=0, dim_size=y.size(0), reduce="sum")</code>又将每个dst节点对应的src的one
+hot相加。</p>
+<p>两个temp相加后，得到的是每个节点所连边（from+to）的节点背景节点的数量</p>
+<p>增量学习和对邻域信息做衰减是什么？</p>
+<section id="footnotes" class="footnotes footnotes-end-of-document"
+role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"><p>1.http://konect.cc/networks/opsahl-ucsocial/<a
+href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li
+id="fn2"><p>2.http://networkrepository.com/ia-enron-email-dynamic.php<a
+href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>3.http://networkrepository.com/fb-wosn-friends.php<a
+href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>4.http://snap.stanford.edu/data/sx-mathoverflow.html<a
+href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>5.https://www.ijcai.org/Proceedings/2019/0614.pdf<a
+href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li
+id="fn6"><p>6.https://ieeexplore.ieee.org/abstract/document/9377789/<a
+href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://fortunato-all.github.io">fortunato</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://fortunato-all.github.io/posts/62968/">https://fortunato-all.github.io/posts/62968/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://fortunato-all.github.io" target="_blank">吃萝卜不吐萝卜皮~</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/AED/">AED</a><a class="post-meta__tags" href="/tags/dynamic-graph/">dynamic graph</a></div><div class="post_share"><div class="social-share" data-image="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/大图.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/59918/"><img class="prev-cover" src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/大图.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">扩散模型</div></div></a></div><div class="next-post pull-right"><a href="/posts/52924/"><img class="next-cover" src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/hetero/20230306105851.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">动态图异常检测——HOG-GCN</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="waline-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/论文阅读笔记/头像.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">fortunato</div><div class="author-info__description">记一忘三二</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">9</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">9</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/fortunato-all"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/fortunato-all" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%A0%E7%BB%9F%E6%84%8F%E4%B9%89%E7%9A%84%E6%97%B6%E5%BA%8F%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B"><span class="toc-text">传统意义的时序异常检测</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A0%94%E7%A9%B6%E6%97%B6%E5%BA%8F%E5%8F%98%E5%8C%96%E7%9A%84%E5%9B%BE%E7%BB%93%E6%9E%84%E7%9A%84%E5%BC%82%E5%B8%B8%E6%A3%80%E6%B5%8B"><span class="toc-text">研究时序变化的图结构的异常检测</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dgraph%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="toc-text">DGraph数据集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8gearsage%E7%9A%84%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95%E4%B8%AD%E4%B8%8Epyg%E7%9A%84%E6%96%B9%E6%B3%95%E4%B8%8D%E5%90%8C"><span class="toc-text">在GearSage的处理方法中（与PyG的方法不同）：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%B9%E6%95%B0%E6%8D%AE%E9%9B%86%E7%9A%84%E5%A4%84%E7%90%86read_dgraphfinfolder"><span class="toc-text">对数据集的处理：read_dgraphfin(folder)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8A%82%E7%82%B9%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B"><span class="toc-text">节点特征工程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BE%B9%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B"><span class="toc-text">边特征工程</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/posts/47450/" title="图神经网络"><img src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/大图.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="图神经网络"/></a><div class="content"><a class="title" href="/posts/47450/" title="图神经网络">图神经网络</a><time datetime="2023-04-21T00:39:04.000Z" title="发表于 2023-04-21 08:39:04">2023-04-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/46224/" title="Graph Transformers"><img src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/大图.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Graph Transformers"/></a><div class="content"><a class="title" href="/posts/46224/" title="Graph Transformers">Graph Transformers</a><time datetime="2023-03-29T05:27:28.000Z" title="发表于 2023-03-29 13:27:28">2023-03-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/52924/" title="动态图异常检测——HOG-GCN"><img src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/hetero/20230306105851.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="动态图异常检测——HOG-GCN"/></a><div class="content"><a class="title" href="/posts/52924/" title="动态图异常检测——HOG-GCN">动态图异常检测——HOG-GCN</a><time datetime="2023-03-05T02:08:22.000Z" title="发表于 2023-03-05 10:08:22">2023-03-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/62968/" title="动态图异常检测数据集，及GearSage代码详解"><img src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/大图.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="动态图异常检测数据集，及GearSage代码详解"/></a><div class="content"><a class="title" href="/posts/62968/" title="动态图异常检测数据集，及GearSage代码详解">动态图异常检测数据集，及GearSage代码详解</a><time datetime="2023-02-21T01:56:25.000Z" title="发表于 2023-02-21 09:56:25">2023-02-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/posts/59918/" title="扩散模型"><img src="https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/大图.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="扩散模型"/></a><div class="content"><a class="title" href="/posts/59918/" title="扩散模型">扩散模型</a><time datetime="2023-02-19T09:34:14.000Z" title="发表于 2023-02-19 17:34:14">2023-02-19</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://testingcf.jsdelivr.net/gh/fortunato-all/tuchuang/主页背景.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2023 By fortunato</div><div class="footer_custom_text">相逢的人会再相逢</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">简</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
   if (typeof pangu === 'object') pangu.autoSpacingPage()
   else {
     getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
